@@ -9,3 +9,477 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: mantis-astra-theme
 Template: astra
 */
+
+/**
+ * ============================================================================
+ * ESTILOS CUSTOM PARA CATÁLOGO DE PRODUCTOS - MANTIS
+ * ============================================================================
+ * Estos estilos reemplazan el diseño por defecto de WooCommerce
+ * con un layout moderno usando CSS Grid y componentes tipo card
+ */
+
+/* ============================================================================
+   VARIABLES CSS (Custom Properties)
+   Acá definimos los colores y valores que vamos a reutilizar en todo el CSS
+   Cambialos según tu paleta de colores
+   ============================================================================ */
+:root {
+  /* Colores principales */
+  --mantis-primary: #ff8800;
+  --mantis-primary-dark: #d06f00;
+  --mantis-primary-light: #ffa844;
+  
+  /* Colores de fondo */
+  --mantis-bg-light: #ffffff;
+  --mantis-bg-gray: #f8fafc;
+  --mantis-bg-dark: #1e293b;
+  
+  /* Colores de texto */
+  --mantis-text-primary: #0f172a;
+  --mantis-text-secondary: #64748b;
+  --mantis-text-light: #94a3b8;
+  
+  /* Colores de estado */
+  --mantis-success: #10b981;
+  --mantis-warning: #f59e0b;
+  --mantis-danger: #ef4444;
+  
+  /* Espaciados */
+  --mantis-spacing-xs: 0.5rem;
+  --mantis-spacing-sm: 1rem;
+  --mantis-spacing-md: 1.5rem;
+  --mantis-spacing-lg: 2rem;
+  --mantis-spacing-xl: 3rem;
+  
+  /* Sombras */
+  --mantis-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --mantis-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --mantis-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --mantis-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  
+  /* Bordes */
+  --mantis-radius-sm: 0.375rem;
+  --mantis-radius-md: 0.5rem;
+  --mantis-radius-lg: 0.75rem;
+  
+  /* Transiciones */
+  --mantis-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============================================================================
+   CONTENEDOR PRINCIPAL DEL SHOP
+   ============================================================================ */
+.mantis-shop-wrapper {
+  width: 100%;
+  max-width: 1400px; /* Ancho máximo del contenedor */
+  margin: 0 auto;
+  padding: var(--mantis-spacing-md);
+}
+
+/* ============================================================================
+   SECCIÓN HERO (Banner superior)
+   Solo se muestra en la página principal de la tienda
+   ============================================================================ */
+.mantis-shop-hero {
+  background: linear-gradient(135deg, var(--mantis-primary) 0%, var(--mantis-primary-dark) 100%);
+  border-radius: var(--mantis-radius-lg);
+  padding: var(--mantis-spacing-xl);
+  margin-bottom: var(--mantis-spacing-xl);
+  color: white;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Efecto de fondo opcional con patrón */
+.mantis-shop-hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.mantis-shop-hero__content {
+  position: relative;
+  z-index: 1;
+}
+
+.mantis-shop-hero__title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0 0 var(--mantis-spacing-sm) 0;
+  line-height: 1.2;
+}
+
+.mantis-shop-hero__description {
+  font-size: 1.125rem;
+  opacity: 0.9;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* ============================================================================
+   CONTROLES DEL CATÁLOGO (contador de resultados y ordenamiento)
+   ============================================================================ */
+.mantis-shop-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--mantis-spacing-lg);
+  padding: var(--mantis-spacing-sm);
+  background: var(--mantis-bg-gray);
+  border-radius: var(--mantis-radius-md);
+  flex-wrap: wrap;
+  gap: var(--mantis-spacing-sm);
+}
+
+/* Estilos para el selector de ordenamiento de WooCommerce */
+.mantis-shop-controls .woocommerce-ordering select {
+  padding: 0.5rem 2rem 0.5rem 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: var(--mantis-radius-sm);
+  background-color: white;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: var(--mantis-transition);
+}
+
+.mantis-shop-controls .woocommerce-ordering select:hover {
+  border-color: var(--mantis-primary);
+}
+
+/* ============================================================================
+   GRID DE PRODUCTOS
+   Acá está la magia del layout responsive automático
+   ============================================================================ */
+.mantis-products-grid {
+  display: grid;
+  /* 
+    Esta línea hace toda la magia del responsive:
+    - repeat(auto-fill, ...) crea tantas columnas como quepan
+    - minmax(280px, 1fr) dice que cada columna mínimo 280px, máximo lo que sobre del espacio
+    - Resultado: se adapta solo sin media queries complejos
+  */
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--mantis-spacing-lg);
+  margin-bottom: var(--mantis-spacing-xl);
+}
+
+/* ============================================================================
+   CARD DE PRODUCTO INDIVIDUAL
+   Esta es la estructura de cada producto en el catálogo
+   ============================================================================ */
+.mantis-product-card {
+  background: var(--mantis-bg-light);
+  border-radius: var(--mantis-radius-lg);
+  overflow: hidden;
+  box-shadow: var(--mantis-shadow-sm);
+  transition: var(--mantis-transition);
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* Para que todas las cards tengan la misma altura */
+}
+
+/* Efecto hover: la card se eleva un poco */
+.mantis-product-card:hover {
+  box-shadow: var(--mantis-shadow-xl);
+  transform: translateY(-4px);
+}
+
+/* ----------------------------------------------------------------------------
+   CONTENEDOR DE IMAGEN
+   ---------------------------------------------------------------------------- */
+.mantis-product-card__image-wrapper {
+  position: relative;
+  width: 100%;
+  padding-top: 100%; /* Esto crea un aspect ratio cuadrado (1:1) */
+  background: var(--mantis-bg-gray);
+  overflow: hidden;
+}
+
+.mantis-product-card__image-link {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mantis-product-card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* La imagen cubre todo el espacio sin deformarse */
+  transition: var(--mantis-transition);
+}
+
+/* Efecto zoom en la imagen al hacer hover */
+.mantis-product-card:hover .mantis-product-card__image {
+  transform: scale(1.05);
+}
+
+/* ----------------------------------------------------------------------------
+   BADGES (Oferta, Sin stock, etc.)
+   ---------------------------------------------------------------------------- */
+.mantis-product-card__sale-badge,
+.mantis-product-card__out-of-stock {
+  position: absolute;
+  top: var(--mantis-spacing-sm);
+  right: var(--mantis-spacing-sm);
+  padding: 0.375rem 0.75rem;
+  border-radius: var(--mantis-radius-sm);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  z-index: 2;
+  box-shadow: var(--mantis-shadow-md);
+}
+
+.mantis-product-card__sale-badge {
+  background: var(--mantis-danger);
+  color: white;
+}
+
+.mantis-product-card__out-of-stock {
+  background: var(--mantis-text-secondary);
+  color: white;
+}
+
+/* ----------------------------------------------------------------------------
+   CONTENIDO DE LA CARD (título, precio, etc.)
+   ---------------------------------------------------------------------------- */
+.mantis-product-card__content {
+  padding: var(--mantis-spacing-md);
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1; /* Ocupa el espacio disponible */
+}
+
+/* Categorías del producto */
+.mantis-product-card__categories {
+  font-size: 0.75rem;
+  color: var(--mantis-primary);
+  font-weight: 500;
+  margin-bottom: var(--mantis-spacing-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.mantis-product-card__categories a {
+  color: inherit;
+  text-decoration: none;
+  transition: var(--mantis-transition);
+}
+
+.mantis-product-card__categories a:hover {
+  color: var(--mantis-primary-dark);
+}
+
+/* Título del producto */
+.mantis-product-card__title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.4;
+  margin: 0 0 var(--mantis-spacing-sm) 0;
+  color: var(--mantis-text-primary);
+}
+
+.mantis-product-card__title a {
+  color: inherit;
+  text-decoration: none;
+  transition: var(--mantis-transition);
+}
+
+.mantis-product-card__title a:hover {
+  color: var(--mantis-primary);
+}
+
+/* Descripción corta (opcional) */
+.mantis-product-card__excerpt {
+  font-size: 0.875rem;
+  color: var(--mantis-text-secondary);
+  line-height: 1.6;
+  margin-bottom: var(--mantis-spacing-md);
+  flex-grow: 1; /* Empuja el footer hacia abajo */
+}
+
+/* ----------------------------------------------------------------------------
+   FOOTER DE LA CARD (precio y botón)
+   ---------------------------------------------------------------------------- */
+.mantis-product-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--mantis-spacing-sm);
+  padding-top: var(--mantis-spacing-md);
+  border-top: 1px solid #e2e8f0;
+  margin-top: auto; /* Se pega al fondo de la card */
+}
+
+/* Precio del producto */
+.mantis-product-card__price {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--mantis-primary);
+}
+
+/* Precio tachado cuando hay oferta */
+.mantis-product-card__price del {
+  font-size: 0.875rem;
+  color: var(--mantis-text-light);
+  font-weight: 400;
+  margin-right: 0.5rem;
+}
+
+/* Precio de oferta */
+.mantis-product-card__price ins {
+  text-decoration: none;
+  color: var(--mantis-danger);
+}
+
+/* ----------------------------------------------------------------------------
+   BOTÓN DE AGREGAR AL CARRITO
+   ---------------------------------------------------------------------------- */
+.mantis-product-card__actions .button,
+.mantis-product-card__actions .added_to_cart {
+  background: var(--mantis-primary);
+  color: white;
+  padding: 0.625rem 1.25rem;
+  border: none;
+  border-radius: var(--mantis-radius-md);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--mantis-transition);
+  text-decoration: none;
+  display: inline-block;
+}
+
+.mantis-product-card__actions .button:hover,
+.mantis-product-card__actions .added_to_cart:hover {
+  background: var(--mantis-primary-dark);
+  transform: translateY(-1px);
+  box-shadow: var(--mantis-shadow-md);
+}
+
+/* Botón cuando el producto ya fue agregado */
+.mantis-product-card__actions .added_to_cart {
+  background: var(--mantis-success);
+}
+
+/* Botón de "loading" cuando se está agregando al carrito */
+.mantis-product-card__actions .loading {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+/* ============================================================================
+   FOOTER DEL SHOP (paginación)
+   ============================================================================ */
+.mantis-shop-footer {
+  margin-top: var(--mantis-spacing-xl);
+}
+
+/* Estilos para la paginación de WooCommerce */
+.mantis-shop-footer .woocommerce-pagination {
+  text-align: center;
+}
+
+.mantis-shop-footer .woocommerce-pagination ul {
+  display: inline-flex;
+  gap: var(--mantis-spacing-xs);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.mantis-shop-footer .woocommerce-pagination li {
+  display: inline-block;
+}
+
+.mantis-shop-footer .woocommerce-pagination a,
+.mantis-shop-footer .woocommerce-pagination span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.5rem;
+  height: 2.5rem;
+  padding: 0 0.75rem;
+  border: 1px solid #e2e8f0;
+  border-radius: var(--mantis-radius-sm);
+  color: var(--mantis-text-primary);
+  text-decoration: none;
+  transition: var(--mantis-transition);
+}
+
+.mantis-shop-footer .woocommerce-pagination a:hover {
+  background: var(--mantis-primary);
+  color: white;
+  border-color: var(--mantis-primary);
+}
+
+.mantis-shop-footer .woocommerce-pagination span.current {
+  background: var(--mantis-primary);
+  color: white;
+  border-color: var(--mantis-primary);
+}
+
+/* ============================================================================
+   RESPONSIVE: AJUSTES PARA TABLETS
+   ============================================================================ */
+@media (max-width: 768px) {
+  /* El grid ya se adapta automáticamente, pero ajustamos algunos espaciados */
+  .mantis-shop-wrapper {
+    padding: var(--mantis-spacing-sm);
+  }
+  
+  .mantis-shop-hero {
+    padding: var(--mantis-spacing-lg);
+  }
+  
+  .mantis-shop-hero__title {
+    font-size: 2rem;
+  }
+  
+  .mantis-products-grid {
+    gap: var(--mantis-spacing-md);
+  }
+  
+  .mantis-shop-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+/* ============================================================================
+   RESPONSIVE: AJUSTES PARA MÓVILES
+   ============================================================================ */
+@media (max-width: 480px) {
+  .mantis-shop-hero__title {
+    font-size: 1.5rem;
+  }
+  
+  .mantis-shop-hero__description {
+    font-size: 1rem;
+  }
+  
+  /* En mobile, hacemos que el precio y botón se apilen verticalmente */
+  .mantis-product-card__footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .mantis-product-card__actions .button {
+    width: 100%;
+    text-align: center;
+  }
+}
