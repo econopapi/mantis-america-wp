@@ -1,67 +1,88 @@
 <?php
 /**
- * The template for displaying product content within loops
+ * Custom product card template for Mantis
+ * Versión customizada para un diseño moderno de catálogo
  *
- * This template can be overridden by copying it to yourtheme/woocommerce/content-product.php.
- *
- * HOWEVER, on occasion WooCommerce will need to update template files and you
- * (the theme developer) will need to copy the new files to your theme to
- * maintain compatibility. We try to do this as little as possible, but it does
- * happen. When this occurs the version of the template file will be bumped and
- * the readme will list any important changes.
- *
- * @see     https://woocommerce.com/document/template-structure/
- * @package WooCommerce\Templates
- * @version 9.4.0
+ * @package Mantis-Astra-WooCommerce
+ * @version 1.0.0
  */
 
 defined( 'ABSPATH' ) || exit;
 
 global $product;
 
-// Check if the product is a valid WooCommerce product and ensure its visibility before proceeding.
+// Verificar que el producto existe y es visible
 if ( ! is_a( $product, WC_Product::class ) || ! $product->is_visible() ) {
 	return;
 }
 ?>
-<li <?php wc_product_class( '', $product ); ?>>
-	<?php
-	/**
-	 * Hook: woocommerce_before_shop_loop_item.
-	 *
-	 * @hooked woocommerce_template_loop_product_link_open - 10
-	 */
-	do_action( 'woocommerce_before_shop_loop_item' );
 
-	/**
-	 * Hook: woocommerce_before_shop_loop_item_title.
-	 *
-	 * @hooked woocommerce_show_product_loop_sale_flash - 10
-	 * @hooked woocommerce_template_loop_product_thumbnail - 10
-	 */
-	do_action( 'woocommerce_before_shop_loop_item_title' );
+<div <?php wc_product_class( 'mantis-product-card', $product ); ?>>
+	
+	<div class="mantis-product-card__image-wrapper">
+		<?php 
+		// Mostrar badge de oferta si aplica
+		if ( $product->is_on_sale() ) : ?>
+			<span class="mantis-product-card__sale-badge">¡OFERTA!</span>
+		<?php endif; ?>
+		
+		<a href="<?php echo esc_url( $product->get_permalink() ); ?>" class="mantis-product-card__image-link">
+			<?php 
+			// Mostrar la imagen del producto
+			echo $product->get_image( 'woocommerce_thumbnail', array( 
+				'class' => 'mantis-product-card__image',
+				'loading' => 'lazy' 
+			) ); 
+			?>
+		</a>
 
-	/**
-	 * Hook: woocommerce_shop_loop_item_title.
-	 *
-	 * @hooked woocommerce_template_loop_product_title - 10
-	 */
-	do_action( 'woocommerce_shop_loop_item_title' );
+		<?php 
+		// Si el producto no tiene stock, mostrar badge
+		if ( ! $product->is_in_stock() ) : ?>
+			<span class="mantis-product-card__out-of-stock">Sin stock</span>
+		<?php endif; ?>
+	</div>
 
-	/**
-	 * Hook: woocommerce_after_shop_loop_item_title.
-	 *
-	 * @hooked woocommerce_template_loop_rating - 5
-	 * @hooked woocommerce_template_loop_price - 10
-	 */
-	do_action( 'woocommerce_after_shop_loop_item_title' );
+	<div class="mantis-product-card__content">
+		
+		<?php 
+		// Mostrar categorías del producto (Opcional)
+		$categories = wc_get_product_category_list( $product->get_id(), ', ' );
+		if ( $categories ) : ?>
+			<div class="mantis-product-card__categories">
+				<?php echo wp_kses_post( $categories ); ?>
+			</div>
+		<?php endif; ?>
 
-	/**
-	 * Hook: woocommerce_after_shop_loop_item.
-	 *
-	 * @hooked woocommerce_template_loop_product_link_close - 5
-	 * @hooked woocommerce_template_loop_add_to_cart - 10
-	 */
-	do_action( 'woocommerce_after_shop_loop_item' );
-	?>
-</li>
+		<h2 class="mantis-product-card__title">
+			<a href="<?php echo esc_url( $product->get_permalink() ); ?>">
+				<?php echo esc_html( $product->get_name() ); ?>
+			</a>
+		</h2>
+
+		<?php 
+		// Mostrar descripción corta si existe (opcional)
+		$short_description = $product->get_short_description();
+		if ( $short_description && strlen( $short_description ) > 0 ) : ?>
+			<div class="mantis-product-card__excerpt">
+				<?php echo wp_trim_words( $short_description, 15, '...' ); ?>
+			</div>
+		<?php endif; ?>
+
+		<div class="mantis-product-card__footer">
+			<div class="mantis-product-card__price">
+				<?php echo $product->get_price_html(); ?>
+			</div>
+
+			<div class="mantis-product-card__actions">
+				<?php 
+				// Botón de agregar al carrito
+				// Este hook mantiene la funcionalidad AJAX de WooCommerce
+				woocommerce_template_loop_add_to_cart(); 
+				?>
+			</div>
+		</div>
+
+	</div>
+
+</div>
