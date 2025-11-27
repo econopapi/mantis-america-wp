@@ -502,13 +502,160 @@ Template: astra
 }
 
 /* ============================================================================
+   HERO DE CATEGORÍA INDIVIDUAL (para taxonomy-product_cat.php)
+   Similar al hero de shop pero con soporte para imagen de fondo
+   ============================================================================ */
+.mantis-category-hero {
+  position: relative;
+  background: linear-gradient(135deg, #4c1d95 0%, #5b21b6 50%, #6d28d9 100%);
+  border-radius: var(--mantis-radius-lg);
+  padding: var(--mantis-spacing-xl);
+  margin-bottom: var(--mantis-spacing-lg);
+  color: white;
+  overflow: hidden;
+  min-height: 250px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Imagen de fondo opcional */
+.mantis-category-hero__background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.2;
+  z-index: 1;
+}
+
+/* Overlay oscuro para mejorar legibilidad del texto */
+.mantis-category-hero__overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 20% 50%, rgba(139, 92, 246, 0.3) 0%, transparent 50%),
+              radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.3) 0%, transparent 50%);
+  z-index: 2;
+}
+
+.mantis-category-hero__content {
+  position: relative;
+  z-index: 3;
+  text-align: center;
+  max-width: 800px;
+}
+
+.mantis-category-hero__title {
+  color: #fff;
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0 0 var(--mantis-spacing-sm) 0;
+  line-height: 1.2;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.mantis-category-hero__description {
+  font-size: 1.125rem;
+  line-height: 1.6;
+  opacity: 0.95;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* ============================================================================
+   FILTROS DE CATEGORÍAS (dropdowns)
+   ============================================================================ */
+.mantis-category-filters {
+  background: var(--mantis-bg-gray);
+  border-radius: var(--mantis-radius-lg);
+  padding: var(--mantis-spacing-lg);
+  margin-bottom: var(--mantis-spacing-lg);
+  box-shadow: var(--mantis-shadow-sm);
+}
+
+.mantis-category-filters__inner {
+  display: flex;
+  gap: var(--mantis-spacing-lg);
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+/* Grupo individual de filtro (label + select) */
+.mantis-filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mantis-spacing-xs);
+  flex: 1;
+  min-width: 200px;
+}
+
+.mantis-filter-group__label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--mantis-text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Estilos del select (dropdown) */
+.mantis-filter-select {
+  width: 100%;
+  padding: 0.75rem 2.5rem 0.75rem 1rem;
+  border: 2px solid #e2e8f0;
+  border-radius: var(--mantis-radius-md);
+  background-color: white;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236366f1' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 12px;
+  font-size: 1rem;
+  color: var(--mantis-text-primary);
+  cursor: pointer;
+  transition: var(--mantis-transition);
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.mantis-filter-select:hover {
+  border-color: var(--mantis-primary);
+}
+
+.mantis-filter-select:focus {
+  outline: none;
+  border-color: var(--mantis-primary);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+/* Opciones del select */
+.mantis-filter-select option {
+  padding: 0.5rem;
+}
+
+/* Botón secundario (opcional, para "ver todos") */
+.mantis-button--secondary {
+  background: white;
+  color: var(--mantis-primary);
+  border: 2px solid var(--mantis-primary);
+  box-shadow: none;
+}
+
+.mantis-button--secondary:hover {
+  background: var(--mantis-primary);
+  color: white;
+}
+
+/* ============================================================================
    HEADER DE CATEGORÍA (fondo morado con subcategorías)
    ============================================================================ */
 .mantis-category-header {
-  /* background: linear-gradient(135deg, var(--mantis-secondary-dark) 0%,
-                                      var(--mantis-secondary-light) 50%, 
-                                      var(--mantis-secondary) 100%); */
-  background-color: var(--mantis-secondary);                                    
+  /* background: linear-gradient(135deg, #4c1d95 0%, #5b21b6 50%, #6d28d9 100%); */
+  background: var(--mantis-secondary);
   border-radius: var(--mantis-radius-lg);
   padding: var(--mantis-spacing-xl);
   margin-bottom: var(--mantis-spacing-lg);
@@ -614,7 +761,7 @@ Template: astra
 }
 
 .mantis-subcategory-card__name {
-  COLOR: #FFF;
+  color: #fff;
   font-size: 0.875rem;
   font-weight: 600;
   margin: 0;
