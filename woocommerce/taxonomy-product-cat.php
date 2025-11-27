@@ -26,6 +26,14 @@ $category_image = $thumbnail_id ? wp_get_attachment_url( $thumbnail_id ) : '';
 
 ?>
 
+<style>
+.woocommerce-breadcrumb {
+    text-align: center;
+    width: 100%; /* Ensures the container takes full width for centering to work */
+    display: block; /* Ensures it acts like a block element if it's inline by default */
+}
+</style>
+
 <div class="mantis-shop-wrapper">
 
 	<!-- Hero de la categoría con fondo morado -->

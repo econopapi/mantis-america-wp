@@ -19,6 +19,10 @@ do_action( 'woocommerce_before_main_content' );
 
 ?>
 
+<style>
+	.woocommerce-breadcrumb { display: none; }
+</style>
+
 <div class="mantis-shop-wrapper">
 
 	<?php
@@ -34,7 +38,7 @@ do_action( 'woocommerce_before_main_content' );
 	 */
 	if ( $is_main_shop ) :
 	?>
-	
+
 		<!-- Hero section de la tienda -->
 		<div class="mantis-shop-hero">
 			<div class="mantis-shop-hero__content">
@@ -210,7 +214,7 @@ do_action( 'woocommerce_before_main_content' );
 	 */
 	else :
 	?>
-
+	
 		<?php
 		/**
 		 * Hook: woocommerce_shop_loop_header.
