@@ -25,9 +25,14 @@ Template: astra
    ============================================================================ */
 :root {
   /* Colores principales */
-  --mantis-primary: #ff8800;
-  --mantis-primary-dark: #d06f00;
-  --mantis-primary-light: #ffa844;
+  --mantis-primary: #ff8800; /* Color violeta/índigo moderno */
+  --mantis-primary-dark: #d37203;
+  --mantis-primary-light: #ffa640;
+
+  /* Colores secundarios */
+  --mantis-secondary: #1a0080;
+  --mantis-secondary-dark: #2f00ea;
+  --mantis-secondary-light: #1a0080;
   
   /* Colores de fondo */
   --mantis-bg-light: #ffffff;
@@ -481,5 +486,255 @@ Template: astra
   .mantis-product-card__actions .button {
     width: 100%;
     text-align: center;
+  }
+}
+
+/* ============================================================================
+   SECCIONES DE CATEGORÍAS (para el loop personalizado)
+   ============================================================================ */
+.mantis-category-section {
+  margin-bottom: var(--mantis-spacing-xl);
+  /* Agregamos más espacio entre secciones para que se distingan bien */
+}
+
+.mantis-category-section:last-child {
+  margin-bottom: 0;
+}
+
+/* ============================================================================
+   HEADER DE CATEGORÍA (fondo morado con subcategorías)
+   ============================================================================ */
+.mantis-category-header {
+  /* background: linear-gradient(135deg, var(--mantis-secondary-dark) 0%,
+                                      var(--mantis-secondary-light) 50%, 
+                                      var(--mantis-secondary) 100%); */
+  background-color: var(--mantis-secondary);                                    
+  border-radius: var(--mantis-radius-lg);
+  padding: var(--mantis-spacing-xl);
+  margin-bottom: var(--mantis-spacing-lg);
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Patrón decorativo de fondo */
+.mantis-category-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(circle at 15% 30%, rgba(255, 255, 255, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 85% 70%, rgba(255, 255, 255, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.3) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.mantis-category-header__content {
+  position: relative;
+  z-index: 1;
+}
+
+.mantis-category-header__title {
+  color: #fff;
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0 0 var(--mantis-spacing-sm) 0;
+  line-height: 1.2;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.mantis-category-header__description {
+  font-size: 1.125rem;
+  opacity: 0.9;
+  margin: 0 0 var(--mantis-spacing-lg) 0;
+  max-width: 800px;
+  line-height: 1.6;
+}
+
+/* ============================================================================
+   SUBCATEGORÍAS dentro del header
+   ============================================================================ */
+.mantis-subcategories {
+  margin-top: var(--mantis-spacing-lg);
+}
+
+.mantis-subcategories__title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 var(--mantis-spacing-md) 0;
+  opacity: 0.9;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.mantis-subcategories__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: var(--mantis-spacing-md);
+}
+
+/* Tarjetas individuales de subcategorías */
+.mantis-subcategory-card {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--mantis-radius-md);
+  padding: var(--mantis-spacing-md);
+  text-align: center;
+  text-decoration: none;
+  color: white;
+  transition: var(--mantis-transition);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--mantis-spacing-sm);
+}
+
+.mantis-subcategory-card:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.mantis-subcategory-card__image {
+  width: 80px;
+  height: 80px;
+  border-radius: var(--mantis-radius-sm);
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.mantis-subcategory-card__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mantis-subcategory-card__name {
+  COLOR: #FFF;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* ============================================================================
+   GRID DE PRODUCTOS dentro de una sección de categoría
+   ============================================================================ */
+.mantis-products-grid--category {
+  margin-top: var(--mantis-spacing-lg);
+  margin-bottom: var(--mantis-spacing-lg);
+}
+
+/* ============================================================================
+   FOOTER DE CATEGORÍA (botón de ver más)
+   ============================================================================ */
+.mantis-category-footer {
+  text-align: center;
+  padding: var(--mantis-spacing-lg) 0;
+}
+
+/* ============================================================================
+   BOTONES GENERALES (incluyendo el de ver más productos)
+   ============================================================================ */
+.mantis-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.875rem 2rem;
+  border: none;
+  border-radius: var(--mantis-radius-md);
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: var(--mantis-transition);
+  white-space: nowrap;
+}
+
+.mantis-button--primary {
+  background: linear-gradient(135deg, var(--mantis-primary) 0%, var(--mantis-primary-dark) 100%);
+  color: white;
+  box-shadow: var(--mantis-shadow-md);
+}
+
+.mantis-button--primary:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--mantis-shadow-xl);
+  background: linear-gradient(135deg, var(--mantis-primary-dark) 0%, var(--mantis-primary) 100%);
+}
+
+.mantis-button--large {
+  padding: 1.125rem 2.5rem;
+  font-size: 1.125rem;
+}
+
+/* ============================================================================
+   MENSAJE CUANDO NO HAY PRODUCTOS
+   ============================================================================ */
+.mantis-no-products {
+  text-align: center;
+  padding: var(--mantis-spacing-xl);
+  color: var(--mantis-text-secondary);
+  font-size: 1.125rem;
+  background: var(--mantis-bg-gray);
+  border-radius: var(--mantis-radius-md);
+  margin: var(--mantis-spacing-lg) 0;
+}
+
+/* ============================================================================
+   RESPONSIVE: AJUSTES PARA CATEGORÍAS EN TABLET
+   ============================================================================ */
+@media (max-width: 768px) {
+  .mantis-category-header {
+    padding: var(--mantis-spacing-lg);
+  }
+  
+  .mantis-category-header__title {
+    font-size: 1.75rem;
+  }
+  
+  .mantis-category-header__description {
+    font-size: 1rem;
+  }
+  
+  .mantis-subcategories__grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: var(--mantis-spacing-sm);
+  }
+  
+  .mantis-subcategory-card {
+    padding: var(--mantis-spacing-sm);
+  }
+  
+  .mantis-subcategory-card__image {
+    width: 60px;
+    height: 60px;
+  }
+}
+
+/* ============================================================================
+   RESPONSIVE: AJUSTES PARA CATEGORÍAS EN MÓVIL
+   ============================================================================ */
+@media (max-width: 480px) {
+  .mantis-category-header {
+    padding: var(--mantis-spacing-md);
+  }
+  
+  .mantis-category-header__title {
+    font-size: 1.5rem;
+  }
+  
+  .mantis-subcategories__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .mantis-button--large {
+    padding: 1rem 1.5rem;
+    font-size: 1rem;
+    width: 100%;
   }
 }

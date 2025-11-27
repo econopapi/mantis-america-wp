@@ -106,7 +106,7 @@ do_action( 'woocommerce_before_main_content' );
 						if ( ! empty( $subcategories ) && ! is_wp_error( $subcategories ) ) :
 						?>
 							<div class="mantis-subcategories">
-								<h3 class="mantis-subcategories__title">Subcategorías:</h3>
+								<!-- <h3 class="mantis-subcategories__title">Subcategorías:</h3> -->
 								<div class="mantis-subcategories__grid">
 									<?php foreach ( $subcategories as $subcat ) : 
 										$subcat_link = get_term_link( $subcat );
