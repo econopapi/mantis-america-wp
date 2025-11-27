@@ -1,19 +1,10 @@
-<!-- CUSTOM TEMPLATE MANTIS-ASTRA-WOOCOMMERCE!-->
 <?php
 /**
- * The Template for displaying product archives, including the main shop page which is a post type archive
+ * Custom archive product template for Mantis
+ * Template para el catálogo de productos con diseño moderno
  *
- * This template can be overridden by copying it to yourtheme/woocommerce/archive-product.php.
- *
- * HOWEVER, on occasion WooCommerce will need to update template files and you
- * (the theme developer) will need to copy the new files to your theme to
- * maintain compatibility. We try to do this as little as possible, but it does
- * happen. When this occurs the version of the template file will be bumped and
- * the readme will list any important changes.
- *
- * @see https://woocommerce.com/document/template-structure/
- * @package WooCommerce\Templates
- * @version 8.6.0
+ * @package Mantis-Astra-WooCommerce
+ * @version 1.0.0
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -22,75 +13,141 @@ get_header( 'shop' );
 
 /**
  * Hook: woocommerce_before_main_content.
- *
- * @hooked woocommerce_output_content_wrapper - 10 (outputs opening divs for the content)
- * @hooked woocommerce_breadcrumb - 20
- * @hooked WC_Structured_Data::generate_website_data() - 30
+ * 
+ * Hook que genera el wrapper del contenido y los breadcrumbs.
+ * Funcionalidades útiles del hook:
+ * - woocommerce_output_content_wrapper - 10 (abre los divs del contenido)
+ * - woocommerce_breadcrumb - 20 (las miguitas de pan)
+ * - WC_Structured_Data::generate_website_data() - 30 (datos estructurados para SEO)
  */
 do_action( 'woocommerce_before_main_content' );
 
-/**
- * Hook: woocommerce_shop_loop_header.
- *
- * @since 8.6.0
- *
- * @hooked woocommerce_product_taxonomy_archive_header - 10
- */
-do_action( 'woocommerce_shop_loop_header' );
+?>
 
-if ( woocommerce_product_loop() ) {
+<div class="mantis-shop-wrapper">
 
+	<?php
 	/**
-	 * Hook: woocommerce_before_shop_loop.
-	 *
-	 * @hooked woocommerce_output_all_notices - 10
-	 * @hooked woocommerce_result_count - 20
-	 * @hooked woocommerce_catalog_ordering - 30
+	 * Sección Hero del Catálogo
+	 * Se puede poner banner, título destacado, o lo que se necesite
+	 * Comentalo si no lo vas a usar por ahora
 	 */
-	do_action( 'woocommerce_before_shop_loop' );
+	if ( is_shop() ) : ?>
+		<div class="mantis-shop-hero">
+			<div class="mantis-shop-hero__content">
+				<h1 class="mantis-shop-hero__title">
+					<?php woocommerce_page_title(); ?>
+				</h1>
+				<?php 
+				// Descripción de la tienda (si la configuraste en WooCommerce > Ajustes)
+				if ( term_description() ) : ?>
+					<div class="mantis-shop-hero__description">
+						<?php echo term_description(); ?>
+					</div>
+				<?php endif; ?>
+			</div>
+		</div>
+	<?php endif; ?>
 
-	woocommerce_product_loop_start();
+	<?php
+	/**
+	 * Hook: woocommerce_shop_loop_header.
+	 * Esto muestra el header de categorías cuando estás en una taxonomía
+	 * @hooked woocommerce_product_taxonomy_archive_header - 10
+	 */
+	do_action( 'woocommerce_shop_loop_header' );
+	?>
 
-	if ( wc_get_loop_prop( 'total' ) ) {
-		while ( have_posts() ) {
-			the_post();
+	<?php if ( woocommerce_product_loop() ) : ?>
 
+		<div class="mantis-shop-controls">
+			<?php
 			/**
-			 * Hook: woocommerce_shop_loop.
+			 * Hook: woocommerce_before_shop_loop.
+			 * 
+			 * Estos hooks traen los controles del catálogo:
+			 * - woocommerce_output_all_notices - 10 (notificaciones y mensajes)
+			 * - woocommerce_result_count - 20 (muestra "Mostrando 1-12 de 50 resultados")
+			 * - woocommerce_catalog_ordering - 30 (dropdown de ordenar por precio, etc.)
 			 */
-			do_action( 'woocommerce_shop_loop' );
+			do_action( 'woocommerce_before_shop_loop' );
+			?>
+		</div>
 
-			wc_get_template_part( 'content', 'product' );
-		}
-	}
+		<?php
+		/**
+		 * ACÁ EMPIEZA LA MAGIA
+		 * En lugar de usar woocommerce_product_loop_start() que genera un <ul>,
+		 * usamos nuestro propio contenedor con clases custom.
+		 * Esto nos da control total sobre el layout con CSS Grid o Flexbox.
+		 */
+		?>
+		<div class="mantis-products-grid">
 
-	woocommerce_product_loop_end();
+			<?php
+			if ( wc_get_loop_prop( 'total' ) ) {
+				while ( have_posts() ) {
+					the_post();
 
-	/**
-	 * Hook: woocommerce_after_shop_loop.
-	 *
-	 * @hooked woocommerce_pagination - 10
-	 */
-	do_action( 'woocommerce_after_shop_loop' );
-} else {
-	/**
-	 * Hook: woocommerce_no_products_found.
-	 *
-	 * @hooked wc_no_products_found - 10
-	 */
-	do_action( 'woocommerce_no_products_found' );
-}
+					/**
+					 * Hook: woocommerce_shop_loop.
+					 * Este hook está vacío por defecto, pero algunos plugins lo usan
+					 * Lo dejamos por si acaso tenés algún plugin que se engancha acá
+					 */
+					do_action( 'woocommerce_shop_loop' );
+
+					/**
+					 * ACÁ SE CARGA TU content-product.php CUSTOMIZADO
+					 * Como cambiamos el elemento de <li> a <div>, esto va a funcionar perfecto
+					 */
+					wc_get_template_part( 'content', 'product' );
+				}
+			}
+			?>
+
+		</div>
+		<?php
+		// Acá cerramos nuestro grid custom
+		// Antes se usaba woocommerce_product_loop_end() que cerraba el </ul>
+		?>
+
+		<div class="mantis-shop-footer">
+			<?php
+			/**
+			 * Hook: woocommerce_after_shop_loop.
+			 * @hooked woocommerce_pagination - 10 (la paginación 1, 2, 3, etc.)
+			 */
+			do_action( 'woocommerce_after_shop_loop' );
+			?>
+		</div>
+
+	<?php else : ?>
+
+		<?php
+		/**
+		 * Hook: woocommerce_no_products_found.
+		 * Muestra el mensaje cuando no hay productos
+		 * @hooked wc_no_products_found - 10
+		 */
+		do_action( 'woocommerce_no_products_found' );
+		?>
+
+	<?php endif; ?>
+
+</div><!-- .mantis-shop-wrapper -->
+
+<?php
 
 /**
  * Hook: woocommerce_after_main_content.
- *
- * @hooked woocommerce_output_content_wrapper_end - 10 (outputs closing divs for the content)
+ * Cierra el wrapper del contenido
+ * @hooked woocommerce_output_content_wrapper_end - 10
  */
 do_action( 'woocommerce_after_main_content' );
 
 /**
  * Hook: woocommerce_sidebar.
- *
+ * Muestra el sidebar de WooCommerce si tu tema lo tiene habilitado
  * @hooked woocommerce_get_sidebar - 10
  */
 do_action( 'woocommerce_sidebar' );
