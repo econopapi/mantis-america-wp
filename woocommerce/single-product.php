@@ -1,62 +1,124 @@
 <?php
 /**
- * The Template for displaying all single products
+ * Template para la página de producto individual
+ * Con hero full-width y soporte para galerías múltiples
  *
- * This template can be overridden by copying it to yourtheme/woocommerce/single-product.php.
- *
- * HOWEVER, on occasion WooCommerce will need to update template files and you
- * (the theme developer) will need to copy the new files to your theme to
- * maintain compatibility. We try to do this as little as possible, but it does
- * happen. When this occurs the version of the template file will be bumped and
- * the readme will list any important changes.
- *
- * @see         https://woocommerce.com/document/template-structure/
- * @package     WooCommerce\Templates
- * @version     1.6.4
+ * @package Mantis-Astra-WooCommerce
+ * @version 1.1.0
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly
+defined( 'ABSPATH' ) || exit;
+
+get_header( 'shop' );
+
+/**
+ * Hook: woocommerce_before_main_content.
+ * Abre el wrapper del contenido
+ */
+do_action( 'woocommerce_before_main_content' );
+
+?>
+
+<style>
+.woocommerce-breadcrumb,
+.woocommerce-breadcrumb > a {
+	color: #fff!important;
 }
 
-get_header( 'shop' ); ?>
+.mantis-product-card__title {
+  font-size: 1.1rem!important;
+}
+</style>
 
-	<?php
-		/**
-		 * woocommerce_before_main_content hook.
-		 *
-		 * @hooked woocommerce_output_content_wrapper - 10 (outputs opening divs for the content)
-		 * @hooked woocommerce_breadcrumb - 20
-		 */
-		do_action( 'woocommerce_before_main_content' );
+<?php while ( have_posts() ) : ?>
+	<?php the_post(); ?>
+
+	<?php 
+	/**
+	 * Setear el producto global para que todos los hooks funcionen
+	 */
+	global $product;
 	?>
 
-		<?php while ( have_posts() ) : ?>
-			<?php the_post(); ?>
+	<!-- Hero con fondo morado oscuro FULL WIDTH -->
+	<div class="mantis-product-hero mantis-product-hero--fullwidth">
+		
+		<!-- Contenedor interno con max-width para el contenido -->
+		<div class="mantis-product-hero__container">
+			<div class="mantis-product-hero__inner">
 
-			<?php wc_get_template_part( 'content', 'single-product' ); ?>
+				<!-- Columna izquierda: Galería de imágenes -->
+				<div class="mantis-product-hero__gallery">
+					<?php
+					/**
+					 * Hook: woocommerce_before_single_product_summary.
+					 * 
+					 * Este hook trae la galería de imágenes del producto
+					 * @hooked woocommerce_show_product_sale_flash - 10 (badge de oferta)
+					 * @hooked woocommerce_show_product_images - 20 (galería con thumbnails)
+					 */
+					do_action( 'woocommerce_before_single_product_summary' );
+					?>
+				</div>
 
-		<?php endwhile; // end of the loop. ?>
+				<!-- Columna derecha: Información del producto -->
+				<div class="mantis-product-hero__summary">
+					<div class="mantis-product-summary">
+						<?php
+						/**
+						 * Hook: woocommerce_single_product_summary.
+						 * 
+						 * Este hook trae toda la información del producto:
+						 * @hooked woocommerce_template_single_title - 5 (título)
+						 * @hooked woocommerce_template_single_rating - 10 (estrellas de rating)
+						 * @hooked woocommerce_template_single_price - 10 (precio)
+						 * @hooked woocommerce_template_single_excerpt - 20 (descripción corta)
+						 * @hooked woocommerce_template_single_add_to_cart - 30 (botón de compra)
+						 * @hooked woocommerce_template_single_meta - 40 (SKU, categorías, tags)
+						 * @hooked woocommerce_template_single_sharing - 50 (compartir en redes)
+						 */
+						do_action( 'woocommerce_single_product_summary' );
+						?>
+					</div>
+				</div>
 
-	<?php
-		/**
-		 * woocommerce_after_main_content hook.
-		 *
-		 * @hooked woocommerce_output_content_wrapper_end - 10 (outputs closing divs for the content)
-		 */
-		do_action( 'woocommerce_after_main_content' );
-	?>
+			</div>
+		</div>
 
-	<?php
-		/**
-		 * woocommerce_sidebar hook.
-		 *
-		 * @hooked woocommerce_get_sidebar - 10
-		 */
-		do_action( 'woocommerce_sidebar' );
-	?>
+	</div>
+
+	<!-- Sección de tabs (descripción, información adicional, reviews) -->
+	<!-- Esta sección SÍ tiene max-width porque es contenido de lectura -->
+	<div class="mantis-product-single-wrapper">
+		<div class="mantis-product-tabs-wrapper">
+			<?php
+			/**
+			 * Hook: woocommerce_after_single_product_summary.
+			 * 
+			 * Este hook trae los tabs de información del producto:
+			 * @hooked woocommerce_output_product_data_tabs - 10 (tabs)
+			 * @hooked woocommerce_upsell_display - 15 (productos relacionados/upsells)
+			 * @hooked woocommerce_output_related_products - 20 (productos relacionados)
+			 */
+			do_action( 'woocommerce_after_single_product_summary' );
+			?>
+		</div>
+	</div>
+
+<?php endwhile; // fin del loop ?>
 
 <?php
-get_footer( 'shop' );
 
-/* Omit closing PHP tag at the end of PHP files to avoid "headers already sent" issues. */
+/**
+ * Hook: woocommerce_after_main_content.
+ * Cierra el wrapper del contenido
+ */
+do_action( 'woocommerce_after_main_content' );
+
+/**
+ * Hook: woocommerce_sidebar.
+ * Muestra el sidebar de WooCommerce si está habilitado
+ */
+do_action( 'woocommerce_sidebar' );
+
+get_footer( 'shop' );

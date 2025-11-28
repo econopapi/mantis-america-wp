@@ -25,10 +25,10 @@ Template: astra
    ============================================================================ */
 :root {
   /* Colores principales */
-  --mantis-primary: #ff8800; /* Color violeta/índigo moderno */
+  --mantis-primary: #ff8800;
   --mantis-primary-dark: #d37203;
   --mantis-primary-light: #ffa640;
-
+  
   /* Colores secundarios */
   --mantis-secondary: #1a0080;
   --mantis-secondary-dark: #2f00ea;
@@ -654,7 +654,6 @@ Template: astra
    HEADER DE CATEGORÍA (fondo morado con subcategorías)
    ============================================================================ */
 .mantis-category-header {
-  /* background: linear-gradient(135deg, #4c1d95 0%, #5b21b6 50%, #6d28d9 100%); */
   background: var(--mantis-secondary);
   border-radius: var(--mantis-radius-lg);
   padding: var(--mantis-spacing-xl);
@@ -883,5 +882,655 @@ Template: astra
     padding: 1rem 1.5rem;
     font-size: 1rem;
     width: 100%;
+  }
+}
+
+/* ============================================================================
+   PÁGINA DE PRODUCTO INDIVIDUAL (single-product.php)
+   ============================================================================ */
+.mantis-product-single-wrapper {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* ============================================================================
+   HERO DEL PRODUCTO (sección superior con fondo oscuro)
+   ============================================================================ */
+.mantis-product-hero {
+  background: linear-gradient(135deg, var(--mantis-secondary) 0%, var(--mantis-secondary-dark) 100%);
+  overflow: hidden;
+  margin-bottom: var(--mantis-spacing-xl);
+  position: relative;
+}
+
+/* Variante full-width (sin border-radius ni max-width) */
+.mantis-product-hero--fullwidth {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  border-radius: 0;
+}
+
+/* Patrón decorativo de fondo */
+.mantis-product-hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 90% 80%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+/* Contenedor interno que limita el ancho del contenido */
+.mantis-product-hero__container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 var(--mantis-spacing-lg);
+}
+
+.mantis-product-hero__inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--mantis-spacing-xl);
+  padding: var(--mantis-spacing-xl) 0;
+  position: relative;
+  z-index: 1;
+}
+
+/* ----------------------------------------------------------------------------
+   GALERÍA DE IMÁGENES (columna izquierda)
+   ---------------------------------------------------------------------------- */
+.mantis-product-hero__gallery {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mantis-spacing-md);
+}
+
+/* Ajustar las imágenes de WooCommerce para que se vean bien en el fondo oscuro */
+.mantis-product-hero__gallery .woocommerce-product-gallery {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: var(--mantis-radius-md);
+  padding: var(--mantis-spacing-md);
+  backdrop-filter: blur(10px);
+}
+
+/* Imagen principal */
+.mantis-product-hero__gallery .woocommerce-product-gallery__wrapper {
+  margin-bottom: var(--mantis-spacing-md);
+}
+
+.mantis-product-hero__gallery .woocommerce-product-gallery__image {
+  background: white;
+  border-radius: var(--mantis-radius-md);
+  overflow: hidden;
+  margin-bottom: 0 !important;
+}
+
+.mantis-product-hero__gallery .woocommerce-product-gallery__image img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Thumbnails (miniaturas) de la galería */
+.mantis-product-hero__gallery .flex-control-thumbs {
+  display: flex;
+  gap: var(--mantis-spacing-sm);
+  margin: var(--mantis-spacing-md) 0 0 0;
+  padding: 0;
+  list-style: none;
+  flex-wrap: wrap;
+}
+
+.mantis-product-hero__gallery .flex-control-thumbs li {
+  flex: 0 0 calc(25% - var(--mantis-spacing-sm));
+  margin: 0;
+  padding: 0;
+}
+
+.mantis-product-hero__gallery .flex-control-thumbs li img {
+  width: 100%;
+  height: auto;
+  display: block;
+  background: white;
+  border-radius: var(--mantis-radius-sm);
+  cursor: pointer;
+  transition: var(--mantis-transition);
+  opacity: 0.7;
+  border: 2px solid transparent;
+}
+
+.mantis-product-hero__gallery .flex-control-thumbs li img:hover {
+  opacity: 1;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.mantis-product-hero__gallery .flex-control-thumbs li img.flex-active {
+  opacity: 1;
+  border-color: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2);
+}
+
+/* Badge de oferta */
+.mantis-product-hero__gallery .onsale {
+  background: var(--mantis-danger);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: var(--mantis-radius-sm);
+  font-weight: 600;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  position: absolute;
+  top: var(--mantis-spacing-md);
+  left: var(--mantis-spacing-md);
+  z-index: 10;
+  box-shadow: var(--mantis-shadow-lg);
+}
+
+/* ----------------------------------------------------------------------------
+   INFORMACIÓN DEL PRODUCTO (columna derecha)
+   ---------------------------------------------------------------------------- */
+.mantis-product-hero__summary {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: white;
+}
+
+.mantis-product-summary {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mantis-spacing-md);
+}
+
+/* Título del producto */
+.mantis-product-summary .product_title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0;
+  color: white;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Rating de estrellas */
+.mantis-product-summary .woocommerce-product-rating {
+  display: flex;
+  align-items: center;
+  gap: var(--mantis-spacing-sm);
+}
+
+.mantis-product-summary .star-rating {
+  color: #fbbf24;
+}
+
+.mantis-product-summary .woocommerce-review-link {
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  font-size: 0.875rem;
+  transition: var(--mantis-transition);
+}
+
+.mantis-product-summary .woocommerce-review-link:hover {
+  color: white;
+}
+
+/* Precio del producto */
+.mantis-product-summary .price {
+  font-size: 2rem;
+  font-weight: 700;
+  color: white;
+  margin: var(--mantis-spacing-sm) 0;
+}
+
+.mantis-product-summary .price del {
+  opacity: 0.6;
+  font-size: 1.5rem;
+  font-weight: 400;
+  margin-right: var(--mantis-spacing-sm);
+}
+
+.mantis-product-summary .price ins {
+  text-decoration: none;
+  color: #fbbf24;
+}
+
+/* Descripción corta */
+.mantis-product-summary .woocommerce-product-details__short-description {
+  font-size: 1.125rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.9);
+  margin: var(--mantis-spacing-md) 0;
+}
+
+/* Formulario de agregar al carrito */
+.mantis-product-summary .cart {
+  display: flex;
+  gap: var(--mantis-spacing-sm);
+  align-items: flex-start;
+  margin: var(--mantis-spacing-lg) 0;
+  flex-wrap: wrap;
+}
+
+.mantis-product-summary .quantity {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--mantis-radius-md);
+  overflow: hidden;
+}
+
+.mantis-product-summary .quantity input[type="number"] {
+  width: 80px;
+  padding: 0.875rem;
+  border: none;
+  background: transparent;
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: center;
+  -moz-appearance: textfield;
+}
+
+.mantis-product-summary .quantity input[type="number"]::-webkit-outer-spin-button,
+.mantis-product-summary .quantity input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.mantis-product-summary .single_add_to_cart_button {
+  flex: 1;
+  min-width: 200px;
+  padding: 1rem 2rem;
+  background: white;
+  color: var(--mantis-secondary);
+  border: none;
+  border-radius: var(--mantis-radius-md);
+  font-size: 1.125rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--mantis-transition);
+  box-shadow: var(--mantis-shadow-lg);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.mantis-product-summary .single_add_to_cart_button:hover {
+  background: #fbbf24;
+  color: var(--mantis-secondary-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--mantis-shadow-xl);
+}
+
+.mantis-product-summary .single_add_to_cart_button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Meta información (SKU, categorías, tags) */
+.mantis-product-summary .product_meta {
+  padding-top: var(--mantis-spacing-lg);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.mantis-product-summary .product_meta > span {
+  display: block;
+  margin-bottom: var(--mantis-spacing-xs);
+}
+
+.mantis-product-summary .product_meta a {
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+  transition: var(--mantis-transition);
+}
+
+.mantis-product-summary .product_meta a:hover {
+  color: white;
+  text-decoration: underline;
+}
+
+/* ----------------------------------------------------------------------------
+   VARIACIONES DE PRODUCTO (para productos variables)
+   ---------------------------------------------------------------------------- */
+.mantis-product-summary .variations {
+  margin: var(--mantis-spacing-md) 0;
+}
+
+.mantis-product-summary .variations td {
+  padding: var(--mantis-spacing-xs) 0;
+}
+
+.mantis-product-summary .variations label {
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 600;
+  margin-right: var(--mantis-spacing-sm);
+  display: block;
+  margin-bottom: var(--mantis-spacing-xs);
+}
+
+.mantis-product-summary .variations select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--mantis-radius-md);
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: var(--mantis-transition);
+}
+
+.mantis-product-summary .variations select:hover,
+.mantis-product-summary .variations select:focus {
+  border-color: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.15);
+  outline: none;
+}
+
+.mantis-product-summary .variations select option {
+  background: var(--mantis-secondary);
+  color: white;
+}
+
+/* ============================================================================
+   TABS DE INFORMACIÓN (descripción, reviews, etc.)
+   ============================================================================ */
+.mantis-product-tabs-wrapper {
+  background: white;
+  border-radius: var(--mantis-radius-lg);
+  padding: var(--mantis-spacing-xl);
+  margin-bottom: var(--mantis-spacing-xl);
+}
+
+/* Estilos para los tabs de WooCommerce */
+.mantis-product-tabs-wrapper .woocommerce-tabs {
+  margin: 0;
+}
+
+.mantis-product-tabs-wrapper .woocommerce-tabs ul.tabs {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 var(--mantis-spacing-lg) 0;
+  display: flex;
+  gap: var(--mantis-spacing-sm);
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.mantis-product-tabs-wrapper .woocommerce-tabs ul.tabs li {
+  margin: 0;
+  padding: 0;
+}
+
+.mantis-product-tabs-wrapper .woocommerce-tabs ul.tabs li a {
+  display: block;
+  padding: var(--mantis-spacing-sm) var(--mantis-spacing-lg);
+  color: var(--mantis-text-secondary);
+  text-decoration: none;
+  font-weight: 600;
+  border-bottom: 3px solid transparent;
+  transition: var(--mantis-transition);
+  position: relative;
+  top: 2px;
+}
+
+.mantis-product-tabs-wrapper .woocommerce-tabs ul.tabs li a:hover {
+  color: var(--mantis-primary);
+}
+
+.mantis-product-tabs-wrapper .woocommerce-tabs ul.tabs li.active a {
+  color: var(--mantis-primary);
+  border-bottom-color: var(--mantis-primary);
+}
+
+.mantis-product-tabs-wrapper .woocommerce-tabs .woocommerce-Tabs-panel {
+  padding: var(--mantis-spacing-lg) 0;
+}
+
+.mantis-product-tabs-wrapper .woocommerce-tabs .woocommerce-Tabs-panel h2 {
+  color: var(--mantis-text-primary);
+  margin-bottom: var(--mantis-spacing-md);
+}
+
+/* ============================================================================
+   PRODUCTOS RELACIONADOS Y UPSELLS
+   ============================================================================ */
+.mantis-product-tabs-wrapper .related.products,
+.mantis-product-tabs-wrapper .upsells.products {
+  margin-top: var(--mantis-spacing-xl);
+  padding-top: var(--mantis-spacing-xl);
+  border-top: 2px solid #e2e8f0;
+}
+
+.mantis-product-tabs-wrapper .related.products h2,
+.mantis-product-tabs-wrapper .upsells.products h2 {
+  font-size: 1.75rem;
+  margin-bottom: var(--mantis-spacing-lg);
+  color: var(--mantis-text-primary);
+}
+
+/* Usar el mismo grid de productos que en el catálogo */
+.mantis-product-tabs-wrapper .related .products,
+.mantis-product-tabs-wrapper .upsells .products {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--mantis-spacing-lg);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Asegurarnos de que cada producto use nuestra card personalizada */
+.mantis-product-tabs-wrapper .related .products li,
+.mantis-product-tabs-wrapper .upsells .products li {
+  margin: 0;
+  padding: 0;
+}
+
+/* Forzar que los productos relacionados usen el diseño de mantis-product-card */
+.mantis-product-tabs-wrapper .related .products .product,
+.mantis-product-tabs-wrapper .upsells .products .product {
+  background: var(--mantis-bg-light);
+  border-radius: var(--mantis-radius-lg);
+  overflow: hidden;
+  box-shadow: var(--mantis-shadow-sm);
+  transition: var(--mantis-transition);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.mantis-product-tabs-wrapper .related .products .product:hover,
+.mantis-product-tabs-wrapper .upsells .products .product:hover {
+  box-shadow: var(--mantis-shadow-xl);
+  transform: translateY(-4px);
+}
+
+/* Imagen del producto en related/upsells */
+.mantis-product-tabs-wrapper .related .products .product .woocommerce-loop-product__link,
+.mantis-product-tabs-wrapper .upsells .products .product .woocommerce-loop-product__link {
+  display: block;
+  position: relative;
+  width: 100%;
+  padding-top: 100%;
+  background: var(--mantis-bg-gray);
+  overflow: hidden;
+}
+
+.mantis-product-tabs-wrapper .related .products .product img,
+.mantis-product-tabs-wrapper .upsells .products .product img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: var(--mantis-transition);
+}
+
+.mantis-product-tabs-wrapper .related .products .product:hover img,
+.mantis-product-tabs-wrapper .upsells .products .product:hover img {
+  transform: scale(1.05);
+}
+
+/* Título del producto en related/upsells */
+.mantis-product-tabs-wrapper .related .products .product .woocommerce-loop-product__title,
+.mantis-product-tabs-wrapper .upsells .products .product .woocommerce-loop-product__title {
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.4;
+  margin: var(--mantis-spacing-md);
+  margin-bottom: var(--mantis-spacing-xs);
+  color: var(--mantis-text-primary);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Precio en related/upsells */
+.mantis-product-tabs-wrapper .related .products .product .price,
+.mantis-product-tabs-wrapper .upsells .products .product .price {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--mantis-primary);
+  margin: 0 var(--mantis-spacing-md) var(--mantis-spacing-md);
+}
+
+.mantis-product-tabs-wrapper .related .products .product .price del,
+.mantis-product-tabs-wrapper .upsells .products .product .price del {
+  font-size: 0.875rem;
+  color: var(--mantis-text-light);
+  font-weight: 400;
+  margin-right: 0.5rem;
+}
+
+.mantis-product-tabs-wrapper .related .products .product .price ins,
+.mantis-product-tabs-wrapper .upsells .products .product .price ins {
+  text-decoration: none;
+  color: var(--mantis-danger);
+}
+
+/* Botón de agregar al carrito en related/upsells */
+.mantis-product-tabs-wrapper .related .products .product .button,
+.mantis-product-tabs-wrapper .upsells .products .product .button {
+  margin: 0 var(--mantis-spacing-md) var(--mantis-spacing-md);
+  background: var(--mantis-primary);
+  color: white;
+  padding: 0.625rem 1.25rem;
+  border: none;
+  border-radius: var(--mantis-radius-md);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--mantis-transition);
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+  width: calc(100% - var(--mantis-spacing-md) * 2);
+}
+
+.mantis-product-tabs-wrapper .related .products .product .button:hover,
+.mantis-product-tabs-wrapper .upsells .products .product .button:hover {
+  background: var(--mantis-primary-dark);
+  transform: translateY(-1px);
+  box-shadow: var(--mantis-shadow-md);
+}
+
+/* Badge de oferta en related/upsells */
+.mantis-product-tabs-wrapper .related .products .product .onsale,
+.mantis-product-tabs-wrapper .upsells .products .product .onsale {
+  position: absolute;
+  top: var(--mantis-spacing-sm);
+  right: var(--mantis-spacing-sm);
+  background: var(--mantis-danger);
+  color: white;
+  padding: 0.375rem 0.75rem;
+  border-radius: var(--mantis-radius-sm);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  z-index: 2;
+  box-shadow: var(--mantis-shadow-md);
+}
+
+/* ============================================================================
+   RESPONSIVE: PRODUCTO INDIVIDUAL EN TABLET
+   ============================================================================ */
+@media (max-width: 992px) {
+  .mantis-product-hero__inner {
+    grid-template-columns: 1fr;
+    gap: var(--mantis-spacing-lg);
+  }
+  
+  .mantis-product-summary .product_title {
+    font-size: 2rem;
+  }
+  
+  .mantis-product-summary .price {
+    font-size: 1.75rem;
+  }
+}
+
+/* ============================================================================
+   RESPONSIVE: PRODUCTO INDIVIDUAL EN MÓVIL
+   ============================================================================ */
+@media (max-width: 640px) {
+  .mantis-product-hero {
+    border-radius: 0;
+    margin-left: calc(var(--mantis-spacing-md) * -1);
+    margin-right: calc(var(--mantis-spacing-md) * -1);
+  }
+  
+  .mantis-product-hero__inner {
+    padding: var(--mantis-spacing-md);
+  }
+  
+  .mantis-product-summary .product_title {
+    font-size: 1.5rem;
+  }
+  
+  .mantis-product-summary .cart {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .mantis-product-summary .quantity {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .mantis-product-summary .single_add_to_cart_button {
+    width: 100%;
+  }
+  
+  .mantis-product-tabs-wrapper {
+    padding: var(--mantis-spacing-md);
+  }
+  
+  .mantis-product-tabs-wrapper .woocommerce-tabs ul.tabs {
+    flex-direction: column;
+    border-bottom: none;
+  }
+  
+  .mantis-product-tabs-wrapper .woocommerce-tabs ul.tabs li a {
+    border-bottom: none;
+    border-left: 3px solid transparent;
+    padding-left: var(--mantis-spacing-md);
+  }
+  
+  .mantis-product-tabs-wrapper .woocommerce-tabs ul.tabs li.active a {
+    border-left-color: var(--mantis-primary);
   }
 }
